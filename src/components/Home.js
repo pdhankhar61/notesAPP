@@ -33,7 +33,7 @@ function Home() {
     // getting saved notes if any
     if (JSON.parse(localStorage.getItem("notes")) !== null) {
       setNotes(JSON.parse(localStorage.getItem("notes")));
-      setFound(true);
+      // setFound(true);
     }
     setHide(true);
   }, []);
