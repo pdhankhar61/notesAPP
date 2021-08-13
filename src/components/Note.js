@@ -1,126 +1,137 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
+import { Formik } from "formik";
 import toast from "react-hot-toast";
-import { makeStyles } from "@material-ui/core/styles";
+import * as Yup from "yup";
 import {
-  Box,
-  Container,
-  Button,
-  CardContent,
-  CardActions,
-  CardActionArea,
-  Card,
   Typography,
-  Grid
+  MenuItem,
+  Select,
+  TextField,
+  Button
 } from "@material-ui/core";
-import NoteModal from "./NoteModal";
 
-const useStyles = makeStyles({
-  root: {
-    maxWidth: 345,
-    borderRadius: 0
-  },
-  media: {
-    height: 140
-  }
-});
-
-function Home() {
-  const [notes, setNotes] = useState([]);
-  const [hide, setHide] = useState(false);
-  const [found, setFound] = useState(false);
-
-  useEffect(() => {
-    if (JSON.parse(localStorage.getItem("notes")) !== null) {
-      setNotes(JSON.parse(localStorage.getItem("notes")));
-      // setFound(true);
-    }
-    setHide(true);
-  }, []);
-
-  const classes = useStyles();
+const defaultValues = {
+  tag_name: "risk",
+  content: "content",
+  user: "user-1",
+  color: "#FFD371"
+};
+export default function Item(props) {
+  const [initialValues, setInitialValues] = useState(
+    props.item ? props.item : defaultValues
+  );
+  console.log(props);
   return (
-    <div>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Box sx={{ display: "flex", justifyContent: { xs: "flex-end" } }}>
-            <NoteModal notes={notes} setNotes={setNotes} />
-          </Box>
-        </Grid>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={Yup.object().shape({
+        tag_name: Yup.string().required(),
+        content: Yup.string().required(),
+        user: Yup.string().required(),
+        color: Yup.string().required()
+      })}
+      onSubmit={(values, { setSubmitting, setStatus }) => {
+        console.log(values);
+        if (props.edit) {
+          // ------------------Code for "Edit Button"---------------//
+          props.setNotes((prev) => {
+            let data = [...prev];
+            data[props.index] = values;
+            localStorage.setItem("notes", JSON.stringify(data));
+            return data;
+          });
+          toast.success("Details Successfully Updated");
 
-        {/* -------------------------------------- */}
-        <Grid item lg={12} xs={12}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", md: "row" },
-              width: "100%",
-              flexWrap: "wrap"
-            }}
+          // ------------------Code for "Edit Button"--ENDS-------------//
+        } else {
+          // ------------------Code For adding details---------------//
+          values["noteId"] = Math.floor(Math.random() * 100000000).toString();
+          props.setNotes([...props.notes, values]);
+          localStorage.setItem(
+            "notes",
+            JSON.stringify([...props.notes, values])
+          );
+          toast.success("Note successfully added");
+          // ------------------Code For adding details---ENDS------------//
+        }
+        setSubmitting(false);
+        setStatus({ success: true });
+      }}
+    >
+      {({
+        errors,
+        handleBlur,
+        handleSubmit,
+        handleChange,
+        touched,
+        values,
+        isSubmitting
+      }) => (
+        <form onSubmit={handleSubmit}>
+          <TextField
+            error={Boolean(touched.tag_name && errors.tag_name)}
+            fullWidth
+            helperText={touched.tag_name && errors.tag_name}
+            label="Tag name"
+            name="tag_name"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.tag_name}
+            variant="outlined"
+            style={{ marginBottom: "20px" }}
+          />
+          <TextField
+            error={Boolean(touched.content && errors.content)}
+            fullWidth
+            helperText={touched.content && errors.content}
+            label="Content"
+            name="content"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.content}
+            variant="outlined"
+            style={{ marginBottom: "20px" }}
+          />
+          <TextField
+            error={Boolean(touched.user && errors.user)}
+            fullWidth
+            helperText={touched.user && errors.user}
+            label="User"
+            name="user"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.user}
+            variant="outlined"
+            style={{ marginBottom: "20px" }}
+          />
+          <Typography color="textPrimary" sx={{ marginBottom: "14px" }}>
+            Select Color
+          </Typography>
+          <Select
+            id="color"
+            name="color"
+            value={values.color}
+            onChange={handleChange}
+            style={{ minWidth: "100%", marginBottom: "20px" }}
           >
-            <Typography hidden={hide} variant="h5" component="h2">
-              Fetching...
-            </Typography>
-            {notes.length === 0 && (
-              <Typography hidden={found} variant="h5" component="h2">
-                No notes are found. Create a new.
-              </Typography>
-            )}
-            {notes.length > 0 &&
-              notes.map((item, index) => (
-                <Box
-                  sx={{ minWidth: "320px", maxWidth: "320px" }}
-                  key={index}
-                  mr={1}
-                  mt={1}
-                >
-                  <Card className={classes.root}>
-                    <CardActionArea
-                      style={{ backgroundColor: `${item.color}` }}
-                    >
-                      <CardContent style={{ textAlign: "left" }}>
-                        <Typography variant="h5">{item.tag_name}</Typography>
-                        <Typography variant="body1" color="textPrimary">
-                          {item.content}
-                        </Typography>
-                        <Typography variant="subtitle1" color="textPrimary">
-                          {item.user}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <NoteModal
-                        edit={true}
-                        item={item}
-                        setNotes={setNotes}
-                        index={index}
-                      />
-                      <Button
-                        size="small"
-                        color="error"
-                        onClick={() => {
-                          setNotes((prev) => {
-                            localStorage.setItem(
-                              "notes",
-                              JSON.stringify(
-                                prev.filter((element) => element !== item)
-                              )
-                            );
-                            return prev.filter((element) => element !== item);
-                          });
-                          toast.success("Successfully Removed");
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Box>
-              ))}
-          </Box>
-        </Grid>
-      </Grid>
-    </div>
+            <MenuItem value="#FFD371">Yellow</MenuItem>
+            <MenuItem value="#f9a1c8">Pink</MenuItem>
+            <MenuItem value="#f56a79">Red</MenuItem>
+            <MenuItem value="#66de93">Green</MenuItem>
+            <MenuItem value="#00d7c8">SkyBlue</MenuItem>
+          </Select>
+
+          <Button
+            color="primary"
+            disabled={isSubmitting}
+            type="submit"
+            variant="contained"
+            onClick={props.handleClose}
+          >
+            Save
+          </Button>
+        </form>
+      )}
+    </Formik>
   );
 }
-
-export default Home;

@@ -12,7 +12,7 @@ import {
   Typography,
   Grid
 } from "@material-ui/core";
-import NoteModal from "./NoteModal";
+import NoteModal from "./NoteComponents/NoteModal";
 
 const useStyles = makeStyles({
   root: {
