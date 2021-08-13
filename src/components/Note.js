@@ -37,31 +37,21 @@ export default function Item(props) {
           props.setNotes((prev) => {
             let data = [...prev];
             data[props.index] = values;
-						localStorage.setItem("notes",JSON.stringify(data));
+	    localStorage.setItem("notes",JSON.stringify(data));
             return data;
           });
-          //   const obj = { note: values };
-          //----api call-----//
-          //   if (
-          //     updateEducationById(studentProfileId, values.subEducationId, obj)
-          //   ) {
+          
               toast.success("Details Successfully Updated");
-          //   } else {
-          //     toast.error("Something went wrong");
-          //   }
+         
           // ------------------Code for "Edit Button"--ENDS-------------//
         } else {
           // ------------------Code For adding details---------------//
           values["noteId"] = Math.floor(Math.random() * 100000000).toString();
           props.setNotes([...props.notes, values]);
-					localStorage.setItem("notes",JSON.stringify([...props.notes,values]));
-          //   const obj = { note: values };
+	  localStorage.setItem("notes",JSON.stringify([...props.notes,values]));
+         
           toast.success("Note successfully added");
-          //   if (addEducation(studentProfileId, obj)) {
-          //     toast.success("Details Successfully Added");
-          //   } else {
-          //     toast.error("Something went wrong");
-          //   }
+         
           // ------------------Code For adding details---ENDS------------//
         }
         setSubmitting(false);
