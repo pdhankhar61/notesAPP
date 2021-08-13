@@ -27,9 +27,20 @@ function Header() {
     <div className={classes.root}>
       <Container maxWidth="100%">
         <Box pt={2} pb={2}>
-          <Grid container  spacing={3}>
+          <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={6} lg={8}>
-              <Box sx={{ display: "flex", alignItems: "center", justifyContent:{md:"flex-start",xs:"center",sm:"center",lg:"flex-start"} }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: {
+                    md: "flex-start",
+                    xs: "center",
+                    sm: "center",
+                    lg: "flex-start"
+                  }
+                }}
+              >
                 <IconButton
                   edge="start"
                   className={classes.menuButton}
@@ -51,11 +62,15 @@ function Header() {
               <Box
                 sx={{
                   display: "flex",
-                 alignItems: "center",
-                  justifyContent: {sm:"center",xs:"center",lg:"flex-end"}
+                  alignItems: "center",
+                  justifyContent: { sm: "center", xs: "center", lg: "flex-end" }
                 }}
               >
-                <Button variant="contained" style={{marginRight:"4px"}} color="primary">
+                <Button
+                  variant="contained"
+                  style={{ marginRight: "8px" }}
+                  color="primary"
+                >
                   Group Highlights
                 </Button>
                 <Button variant="contained" color="primary">
