@@ -10,7 +10,8 @@ import {
   CardActionArea,
   Card,
   Typography,
-  Grid
+  Grid,
+  useTheme
 } from "@material-ui/core";
 import NoteModal from "./NoteComponents/NoteModal";
 
@@ -28,17 +29,17 @@ function Home() {
   const [notes, setNotes] = useState([]);
   const [hide, setHide] = useState(false);
   const [found, setFound] = useState(false);
+  const theme = useTheme();
+  const classes = useStyles();
 
   useEffect(() => {
     // getting saved notes if any
     if (JSON.parse(localStorage.getItem("notes")) !== null) {
       setNotes(JSON.parse(localStorage.getItem("notes")));
-      // setFound(true);
     }
     setHide(true);
   }, []);
 
-  const classes = useStyles();
   return (
     <div>
       {/* --------button to add Note/highlight------------------ */}
@@ -67,7 +68,7 @@ function Home() {
                 No notes are found. Create a new.
               </Typography>
             )}
-            {/* -----------------Data_-_-_Card--------------------- */}
+            {/* ---------------Data_-_-_Card------------------------------------ */}
             {notes.length > 0 &&
               notes.map((item, index) => (
                 <Box
@@ -84,18 +85,10 @@ function Home() {
                         <Typography variant="h5" component="h2">
                           {item.tag_name}
                         </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="textSecondary"
-                          component="p"
-                        >
+                        <Typography variant="subtitle1" color="textPrimary">
                           {item.content}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                          component="p"
-                        >
+                        <Typography variant="body2" color="textPrimary">
                           {item.user}
                         </Typography>
                       </CardContent>
@@ -109,7 +102,7 @@ function Home() {
                       />
                       <Button
                         size="small"
-                        color="error"
+                        style={{ color: `${theme.palette.error.light}` }}
                         onClick={() => {
                           setNotes((prev) => {
                             localStorage.setItem(
@@ -129,6 +122,7 @@ function Home() {
                   </Card>
                 </Box>
               ))}
+            {/* ------------------------------------Data_-_-_Card_-_ENDS--------------- */}
           </Box>
         </Grid>
       </Grid>

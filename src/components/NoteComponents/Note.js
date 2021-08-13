@@ -118,7 +118,7 @@ export default function Item(props) {
             <MenuItem value="#f9a1c8">Pink</MenuItem>
             <MenuItem value="#f56a79">Red</MenuItem>
             <MenuItem value="#66de93">Green</MenuItem>
-            <MenuItem value="#00d7c8">SkyBlue</MenuItem>
+            <MenuItem value="#00d7c8">Blue</MenuItem>
           </Select>
 
           <Button

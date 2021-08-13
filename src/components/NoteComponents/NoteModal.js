@@ -9,9 +9,6 @@ import Note from "./Note";
 
 export default function NoteModal(props) {
   const [open, setOpen] = React.useState(false);
-  if (open) {
-    console.log(props);
-  }
   const handleClickOpen = () => {
     setOpen(true);
   };

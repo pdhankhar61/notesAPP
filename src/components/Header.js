@@ -15,17 +15,13 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2)
   }
-  // button: {
-  //   backgroundColor: "#000",
-  //   color: "#fff"
-  // }
 }));
 
-function Header() {
+function Header({ children }) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Container maxWidth="100%">
+      <Container>
         <Box pt={2} pb={2}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={6} lg={8}>
@@ -54,7 +50,7 @@ function Header() {
                   color="primary"
                   style={{ display: "flex", alignItems: "center" }}
                 >
-                  Messaging Affinity <KeyboardArrowDownIcon />
+                  Messaging Affinity <KeyboardArrowDownIcon /> {children}
                 </Typography>
               </Box>
             </Grid>
