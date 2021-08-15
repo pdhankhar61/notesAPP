@@ -86,7 +86,9 @@ function Home() {
     }
     // getting saved buckets if any
     if (JSON.parse(localStorage.getItem("buckets")) !== null) {
-      setHideNote(true);
+      if (JSON.parse(localStorage.getItem("buckets")).length > 0) {
+        setHideNote(true);
+      }
       setBucket(JSON.parse(localStorage.getItem("buckets")));
     }
 
