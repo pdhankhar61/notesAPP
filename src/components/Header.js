@@ -24,54 +24,28 @@ function Header({ children }) {
       <Container>
         <Box pt={2} pb={2}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={12} md={6} lg={8}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: {
-                    md: "flex-start",
+                    md: "space-between",
                     xs: "center",
-                    sm: "center",
-                    lg: "flex-start"
+                    sm: "space-between",
+                    lg: "space-between"
                   }
                 }}
               >
-                <IconButton
-                  edge="start"
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label="menu"
-                >
-                  <MenuIcon />
-                </IconButton>
+
                 <Typography
                   variant="h6"
                   color="primary"
                   style={{ display: "flex", alignItems: "center" }}
                 >
-                  Messaging Affinity <KeyboardArrowDownIcon /> {children}
+                  Messaging Affinity <KeyboardArrowDownIcon />
                 </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={12} md={6} lg={4}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: { sm: "center", xs: "center", lg: "flex-end" }
-                }}
-              >
-                <Button
-                  variant="contained"
-                  style={{ marginRight: "8px" }}
-                  color="primary"
-                >
-                  Group Highlights
-                </Button>
-                <Button variant="contained" color="primary">
-                  Dot Voting
-                </Button>
+                {children}
               </Box>
             </Grid>
           </Grid>

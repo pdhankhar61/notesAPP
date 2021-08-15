@@ -33,20 +33,28 @@ export default function NoteModal(props) {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Note Details</DialogTitle>
+        {/* -------------- edit or add new------------------ */}
         <DialogContent>
           {props.edit ? (
             <Note
               edit={props.edit}
               setNotes={props.setNotes}
-              index={props.index}
               item={props.item}
+              collectBucketNames={props.collectBucketNames}
+              bucket={props.bucket}
+              setBucket={props.setBucket}
               handleClose={handleClose}
+              setHideNote={props.setHideNote}
             />
           ) : (
             <Note
               notes={props.notes}
+              bucket={props.bucket}
+              setBucket={props.setBucket}
+              collectBucketNames={props.collectBucketNames}
               setNotes={props.setNotes}
               handleClose={handleClose}
+              setHideNote={props.setHideNote}
             />
           )}
         </DialogContent>

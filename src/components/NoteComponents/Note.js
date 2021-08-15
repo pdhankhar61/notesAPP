@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 
 const defaultValues = {
-  tag_name: "risk",
+  bucket_name: "risk",
   content: "content",
   user: "user-1",
   color: "#FFD371"
@@ -25,36 +25,61 @@ export default function Item(props) {
     <Formik
       initialValues={initialValues}
       validationSchema={Yup.object().shape({
-        tag_name: Yup.string().required(),
+        bucket_name: Yup.string().required(),
         content: Yup.string().required(),
         user: Yup.string().required(),
         color: Yup.string().required()
       })}
       onSubmit={(values, { setSubmitting, setStatus }) => {
-        console.log(values);
         if (props.edit) {
           // ------------------Code for "Edit Button"---------------//
+
           props.setNotes((prev) => {
             let data = [...prev];
-            data[props.index] = values;
+            data = data.map((element) => {
+              if (element.noteId === props.item.noteId) {
+                element = values;
+              }
+              return element;
+            });
+
+            // ----------------------------------------------------------------------//
+            // ---if bucket_name field inside note is updated then bucket will also updated .--- //
+            if (props.bucket.length !== 0) {
+              props.collectBucketNames(data, props.bucket, props.setBucket);
+            }
             localStorage.setItem("notes", JSON.stringify(data));
             return data;
           });
+
           toast.success("Details Successfully Updated");
 
           // ------------------Code for "Edit Button"--ENDS-------------//
         } else {
           // ------------------Code For adding details---------------//
+
           values["noteId"] = Math.floor(Math.random() * 100000000).toString();
           props.setNotes([...props.notes, values]);
           localStorage.setItem(
             "notes",
             JSON.stringify([...props.notes, values])
           );
+
+          // ----------------------------------------------------------------------//
+          // ---if new note is added with new bucket_name then new bucket will be added.--- //
+          if (props.bucket.length !== 0) {
+            props.collectBucketNames(
+              [...props.notes, values],
+              props.bucket,
+              props.setBucket
+            );
+            props.setHideNote(true);
+          }
+
           toast.success("Note successfully added");
           // ------------------Code For adding details---ENDS------------//
         }
-        setSubmitting(false);
+        setSubmitting(true);
         setStatus({ success: true });
       }}
     >
@@ -69,14 +94,14 @@ export default function Item(props) {
       }) => (
         <form onSubmit={handleSubmit}>
           <TextField
-            error={Boolean(touched.tag_name && errors.tag_name)}
+            error={Boolean(touched.bucket_name && errors.bucket_name)}
             fullWidth
-            helperText={touched.tag_name && errors.tag_name}
-            label="Tag name"
-            name="tag_name"
+            helperText={touched.bucket_name && errors.bucket_name}
+            label="Bucket name"
+            name="bucket_name"
             onBlur={handleBlur}
             onChange={handleChange}
-            value={values.tag_name}
+            value={values.bucket_name}
             variant="outlined"
             style={{ marginBottom: "20px" }}
           />
@@ -126,7 +151,11 @@ export default function Item(props) {
             disabled={isSubmitting}
             type="submit"
             variant="contained"
-            onClick={props.handleClose}
+            onClick={() => {
+              Object.keys(errors).length === 0
+                ? props.handleClose()
+                : console.log(errors);
+            }}
           >
             Save
           </Button>
